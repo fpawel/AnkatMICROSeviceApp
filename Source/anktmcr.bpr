@@ -1,0 +1,205 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!-- C++Builder XML Project -->
+<PROJECT>
+  <MACROS>
+    <VERSION value="BCB.06.00"/>
+    <PROJECT value="..\bin\anktmcr.exe"/>
+    <OBJFILES value="..\obj\anktmcr.obj ..\obj\unit1.obj ..\obj\HandleTransfer.obj 
+      ..\obj\uGrphSetsDlg.obj ..\obj\uFormDateTimeDlg.obj 
+      ..\obj\uFormMdiChild.obj ..\obj\uFrameDropDownPanel.obj 
+      ..\obj\uFrameGraph.obj ..\obj\a7664adpt.obj ..\obj\ctrlsys.obj 
+      ..\obj\uChartHelper.obj ..\obj\AnsiStringUtils_.obj 
+      ..\obj\DrawGridCell.obj ..\obj\MouseEvt.obj ..\obj\MyFileCtrl.obj 
+      ..\obj\MySynchronize.obj ..\obj\myThread.obj ..\obj\MyVclUtils_.obj 
+      ..\obj\SGrdHlpr.obj ..\obj\MyExeptionImpl.obj ..\obj\TransferManage.obj 
+      ..\obj\AmcrArch.obj ..\obj\AmcrHrdImpl.obj ..\obj\AmcrUtilsImpl.obj 
+      ..\obj\MasterSlaveIO.obj ..\obj\MasterSlaveIOSettingsIni.obj 
+      ..\obj\task_.obj ..\obj\TaskList.obj ..\obj\winRS232.obj 
+      ..\obj\CommSets.obj ..\obj\CommSetsIOHelper.obj ..\obj\MyDCBHelper.obj 
+      ..\obj\guicon.obj ..\obj\uFrmWait.obj ..\obj\winrc.obj ..\obj\MyWindow.obj 
+      ..\obj\iniUtils_.obj ..\obj\uFormGridColsDlg.obj ..\obj\uAppSetsDlg.obj 
+      ..\obj\anktrep.obj ..\obj\uFormTest1.obj ..\obj\MyProcEntry.obj"/>
+    <RESFILES value="anktmcr.res"/>
+    <IDLFILES value=""/>
+    <IDLGENFILES value=""/>
+    <DEFFILE value=""/>
+    <RESDEPEN value="$(RESFILES) unit1.dfm uGrphSetsDlg.dfm uFormDateTimeDlg.dfm 
+      uFormMdiChild.dfm uFrameDropDownPanel.dfm uFrameGraph.dfm 
+      Dialogs\uFrmWait.dfm VCLUtils\Dlg\uFormGridColsDlg.dfm uAppSetsDlg.dfm 
+      uFormTest1.dfm"/>
+    <LIBFILES value=""/>
+    <LIBRARIES value="tee.lib"/>
+    <SPARELIBS value="rtl.lib vcl.lib vclx.lib Tee8C6.lib TeePro8C6.lib TeeUI8C6.lib tee.lib"/>
+    <PACKAGES value="vcl.bpi rtl.bpi dbrtl.bpi vcldb.bpi vclx.bpi bdertl.bpi TeeGL8C6.bpi 
+      TeeDB8C6.bpi Tee8C6.bpi TeeUI8C6.bpi TeeLanguage8C6.bpi TeePro8C6.bpi 
+      TeeWorld8C6.bpi TeeImage8C6.bpi TeeTree2C6Tee8.bpi qrpt.bpi"/>
+    <PATHCPP value=".;VCLUtils;Excpt;DevSys;ComPort;Application;Dialogs;WinUtils;VCLUtils\Dlg"/>
+    <PATHPAS value=".;"/>
+    <PATHRC value=".;"/>
+    <PATHASM value=".;"/>
+    <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
+    <RELEASELIBPATH value="$(BCB)\lib\release"/>
+    <LINKER value="ilink32"/>
+    <USERDEFINES value="_DEBUG"/>
+    <SYSDEFINES value="NO_STRICT;USEPACKAGES"/>
+    <MAINSOURCE value="anktmcr.cpp"/>
+    <INCLUDEPATH value="VCLUtils\Dlg;WinUtils;Dialogs;Application;ComPort;DevSys;Excpt;VCLUtils;$(BCB)\bin;$(BCB)\include;$(BCB)\include\vcl;my_include;my_include\win"/>
+    <LIBPATH value="..\TeeChart\Bpi;..\TeeChart\Sources\Compiled\Builder6\Lib;..\TeeChart\TeeTree\Compiled\Builder6\Lib;VCLUtils\Dlg;WinUtils;Dialogs;$(BCB)\Projects\Lib;Application;ComPort;DevSys;Excpt;VCLUtils;$(BCB)\Bin;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <WARNINGS value="-w-par"/>
+    <OTHERFILES value=""/>
+  </MACROS>
+  <OPTIONS>
+    <IDLCFLAGS value="-IVCLUtils\Dlg -IWinUtils -IDialogs -IApplication -IComPort -IDevSys 
+      -IExcpt -IVCLUtils -I$(BCB)\bin; -I$(BCB)\include -I$(BCB)\include\vcl 
+      -Imy_include -Imy_include\win -src_suffix cpp -D_DEBUG -boa"/>
+    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl60.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c 
+      -tW -tWM"/>
+    <PFLAGS value="-N2..\obj -N0..\obj -$YD -$W -$O- -$A8 -v -JPHNE -M"/>
+    <RFLAGS value=""/>
+    <AFLAGS value="/mx /w2 /zd"/>
+    <LFLAGS value="-I..\obj -D&quot;&quot; -aa -Tpe -x -Gn -v"/>
+    <OTHERFILES value=""/>
+  </OPTIONS>
+  <LINKER>
+    <ALLOBJ value="c0w32.obj $(PACKAGES) sysinit.obj $(OBJFILES)"/>
+    <ALLRES value="$(RESFILES)"/>
+    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mt.lib"/>
+    <OTHERFILES value=""/>
+  </LINKER>
+  <FILELIST>
+      <FILE FILENAME="anktmcr.res" FORMNAME="" UNITNAME="anktmcr.res" CONTAINERID="ResTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="anktmcr.cpp" FORMNAME="" UNITNAME="anktmcr" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="unit1.cpp" FORMNAME="Form1" UNITNAME="unit1" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="HandleTransfer.cpp" FORMNAME="" UNITNAME="HandleTransfer.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="uGrphSetsDlg.cpp" FORMNAME="FormGrphSetsDlg" UNITNAME="uGrphSetsDlg" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="uFormDateTimeDlg.cpp" FORMNAME="FormDateTimeDlg" UNITNAME="uFormDateTimeDlg" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="uFormMdiChild.cpp" FORMNAME="FormMdiChild" UNITNAME="uFormMdiChild" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="uFrameDropDownPanel.cpp" FORMNAME="FrameDropDownPanel" UNITNAME="uFrameDropDownPanel" CONTAINERID="CCompiler" DESIGNCLASS="TFrame" LOCALCOMMAND=""/>
+      <FILE FILENAME="uFrameGraph.cpp" FORMNAME="FrameGraph" UNITNAME="uFrameGraph" CONTAINERID="CCompiler" DESIGNCLASS="TFrame" LOCALCOMMAND=""/>
+      <FILE FILENAME="a7664adpt.cpp" FORMNAME="" UNITNAME="a7664adpt.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="ctrlsys.cpp" FORMNAME="" UNITNAME="ctrlsys.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="VCLUtils\uChartHelper.cpp" FORMNAME="" UNITNAME="uChartHelper.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="VCLUtils\AnsiStringUtils_.cpp" FORMNAME="" UNITNAME="AnsiStringUtils_.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="VCLUtils\DrawGridCell.cpp" FORMNAME="" UNITNAME="DrawGridCell.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="VCLUtils\MouseEvt.cpp" FORMNAME="" UNITNAME="MouseEvt.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="VCLUtils\MyFileCtrl.cpp" FORMNAME="" UNITNAME="MyFileCtrl.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="VCLUtils\MySynchronize.cpp" FORMNAME="" UNITNAME="MySynchronize.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="VCLUtils\myThread.cpp" FORMNAME="" UNITNAME="myThread.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="VCLUtils\MyVclUtils_.cpp" FORMNAME="" UNITNAME="MyVclUtils_.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="VCLUtils\SGrdHlpr.cpp" FORMNAME="" UNITNAME="SGrdHlpr.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Excpt\MyExeptionImpl.cpp" FORMNAME="" UNITNAME="MyExeptionImpl" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="DevSys\TransferManage.cpp" FORMNAME="" UNITNAME="TransferManage.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="DevSys\AmcrArch.cpp" FORMNAME="" UNITNAME="AmcrArch.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="DevSys\AmcrHrdImpl.cpp" FORMNAME="" UNITNAME="AmcrHrdImpl.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="DevSys\AmcrUtilsImpl.cpp" FORMNAME="" UNITNAME="AmcrUtilsImpl.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="DevSys\MasterSlaveIO.cpp" FORMNAME="" UNITNAME="MasterSlaveIO.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="DevSys\MasterSlaveIOSettingsIni.cpp" FORMNAME="" UNITNAME="MasterSlaveIOSettingsIni.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="DevSys\task_.cpp" FORMNAME="" UNITNAME="task_.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="DevSys\TaskList.cpp" FORMNAME="" UNITNAME="TaskList.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="ComPort\winRS232.cpp" FORMNAME="" UNITNAME="winRS232.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="ComPort\CommSets.cpp" FORMNAME="" UNITNAME="CommSets.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="ComPort\CommSetsIOHelper.cpp" FORMNAME="" UNITNAME="CommSetsIOHelper.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="ComPort\MyDCBHelper.cpp" FORMNAME="" UNITNAME="MyDCBHelper.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Application\guicon.cpp" FORMNAME="" UNITNAME="guicon" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Dialogs\uFrmWait.cpp" FORMNAME="FrmWait" UNITNAME="uFrmWait" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="WinUtils\winrc.cpp" FORMNAME="" UNITNAME="winrc" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="VCLUtils\MyWindow.cpp" FORMNAME="" UNITNAME="MyWindow" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="VCLUtils\iniUtils_.cpp" FORMNAME="" UNITNAME="iniUtils_" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="VCLUtils\Dlg\uFormGridColsDlg.cpp" FORMNAME="FormGridColsDlg" UNITNAME="uFormGridColsDlg" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="uAppSetsDlg.cpp" FORMNAME="FormAppSetsDlg" UNITNAME="uAppSetsDlg" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="anktrep.cpp" FORMNAME="" UNITNAME="anktrep" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="uFormTest1.cpp" FORMNAME="FormTest1" UNITNAME="uFormTest1" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="VCLUtils\MyProcEntry.cpp" FORMNAME="" UNITNAME="MyProcEntry" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+  </FILELIST>
+  <BUILDTOOLS>
+  </BUILDTOOLS>
+
+  <IDEOPTIONS>
+[Version Info]
+IncludeVerInfo=0
+AutoIncBuild=0
+MajorVer=1
+MinorVer=0
+Release=0
+Build=0
+Debug=0
+PreRelease=0
+Special=0
+Private=0
+DLL=0
+Locale=1049
+CodePage=1251
+
+[Version Info Keys]
+CompanyName=
+FileDescription=
+FileVersion=1.0.0.0
+InternalName=
+LegalCopyright=
+LegalTrademarks=
+OriginalFilename=
+ProductName=
+ProductVersion=1.0.0.0
+Comments=
+
+[HistoryLists\hlIncludePath]
+Count=6
+Item0=VCLUtils\Dlg;WinUtils;Dialogs;Application;ComPort;DevSys;Excpt;VCLUtils;$(BCB)\bin;$(BCB)\include;$(BCB)\include\vcl;my_include;my_include\win
+Item1=VCLUtils\Dlg;WinUtils;Dialogs;Application;ComPort;DevSys;Excpt;VCLUtils;C:\Program Files\CBuilder6\Bin;$(BCB)\include;$(BCB)\include\vcl;my_include;my_include\win
+Item2=WinUtils;Dialogs;Application;ComPort;DevSys;Excpt;VCLUtils;C:\Program Files\CBuilder6\Bin;$(BCB)\include;$(BCB)\include\vcl;my_include;my_include\win
+Item3=Application;ComPort;DevSys;Excpt;VCLUtils;C:\Program Files\CBuilder6\Bin;$(BCB)\include;$(BCB)\include\vcl;my_include;my_include\win
+Item4=Application;ComPort;DevSys;Excpt;VCLUtils;C:\Program Files\CBuilder6\Bin;$(BCB)\include;$(BCB)\include\vcl;my_include
+Item5=Application;ComPort;DevSys;Excpt;VCLUtils;C:\Program Files\CBuilder6\Bin;$(BCB)\include;$(BCB)\include\vcl
+
+[HistoryLists\hlLibraryPath]
+Count=7
+Item0=..\TeeChart\Bpi;..\TeeChart\Sources\Compiled\Builder6\Lib;..\TeeChart\TeeTree\Compiled\Builder6\Lib;VCLUtils\Dlg;WinUtils;Dialogs;$(BCB)\Projects\Lib;Application;ComPort;DevSys;Excpt;VCLUtils;$(BCB)\Bin;$(BCB)\lib\obj;$(BCB)\lib
+Item1=..\TeeChart\Bpi;..\TeeChart\Sources\Compiled\Builder6\Lib;..\TeeChartBpi;..\TeeChart\TeeTree\Compiled\Builder6\Lib;VCLUtils\Dlg;WinUtils;Dialogs;$(BCB)\Projects\Lib;Application;ComPort;DevSys;Excpt;VCLUtils;$(BCB)\Bin;$(BCB)\lib\obj;$(BCB)\lib
+Item2=..\TeeChart\Bpi;F:\TeeChart_Pro_8_06_Source\Sources\Compiled\Builder6\Lib;..\TeeChartBpi;C:\TeeChart_Pro_8_06_Source\TeeTree\Compiled\Builder6\Lib;VCLUtils\Dlg;WinUtils;Dialogs;C:\TeeChart_Pro_8_06_Source\Sources\Compiled\Builder6\Lib;$(BCB)\Projects\Lib;Application;ComPort;DevSys;Excpt;VCLUtils;C:\Program Files\CBuilder6\Bin;$(BCB)\lib\obj;$(BCB)\lib
+Item3=..\TeeChartBpi;C:\TeeChart_Pro_8_06_Source\TeeTree\Compiled\Builder6\Lib;VCLUtils\Dlg;WinUtils;Dialogs;C:\TeeChart_Pro_8_06_Source\Sources\Compiled\Builder6\Lib;$(BCB)\Projects\Lib;Application;ComPort;DevSys;Excpt;VCLUtils;C:\Program Files\CBuilder6\Bin;$(BCB)\lib\obj;$(BCB)\lib
+Item4=VCLUtils\Dlg;WinUtils;Dialogs;C:\TeeChart_Pro_8_06_Source\Sources\Compiled\Builder6\Lib;$(BCB)\Projects\Lib;Application;ComPort;DevSys;Excpt;VCLUtils;C:\Program Files\CBuilder6\Bin;$(BCB)\lib\obj;$(BCB)\lib
+Item5=WinUtils;Dialogs;C:\TeeChart_Pro_8_06_Source\Sources\Compiled\Builder6\Lib;$(BCB)\Projects\Lib;Application;ComPort;DevSys;Excpt;VCLUtils;C:\Program Files\CBuilder6\Bin;$(BCB)\lib\obj;$(BCB)\lib
+Item6=C:\TeeChart_Pro_8_06_Source\Sources\Compiled\Builder6\Lib;$(BCB)\Projects\Lib;Application;ComPort;DevSys;Excpt;VCLUtils;C:\Program Files\CBuilder6\Bin;$(BCB)\lib\obj;$(BCB)\lib
+
+[HistoryLists\hlDebugSourcePath]
+Count=1
+Item0=$(BCB)\source\vcl
+
+[HistoryLists\hlConditionals]
+Count=1
+Item0=_DEBUG
+
+[HistoryLists\hlIntOutputDir]
+Count=2
+Item0=..\obj
+Item1=..\obj\
+
+[HistoryLists\hlFinalOutputDir]
+Count=2
+Item0=..\bin\
+Item1=..\bin
+
+[HistoryLists\hIBPIOutputDir]
+Count=1
+Item0=..\obj
+
+[Debugging]
+DebugSourceDirs=$(BCB)\source\vcl
+
+[Parameters]
+RunParams=-debug
+Launcher=
+UseLauncher=0
+DebugCWD=
+HostApplication=
+RemoteHost=
+RemotePath=
+RemoteLauncher=
+RemoteCWD=
+RemoteDebug=0
+
+[Compiler]
+ShowInfoMsgs=0
+LinkDebugVcl=0
+  </IDEOPTIONS>
+</PROJECT>

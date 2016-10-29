@@ -1,0 +1,96 @@
+inherited TreeExportForm: TTreeExportForm
+  Left = 363
+  Top = 316
+  Caption = 'Export Tree'
+  ClientHeight = 281
+  ClientWidth = 380
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited PageControl1: TPageControl
+    Width = 380
+    Height = 243
+    inherited TabPicture: TTabSheet
+      inherited SplitPic: TSplitter
+        Left = 100
+        Height = 201
+      end
+      inherited RGFormat: TGroupBox
+        Width = 100
+        Height = 201
+        inherited LBFormat: TListBox
+          Width = 96
+          Height = 184
+        end
+      end
+      inherited PageOptions: TPageControl
+        Left = 103
+        Height = 201
+        inherited TabSize: TTabSheet
+          inherited Label1: TLabel
+            Top = 37
+          end
+          inherited Label2: TLabel
+            Top = 69
+          end
+          inherited EWidth: TEdit
+            Top = 34
+          end
+          inherited UDWidth: TUpDown
+            Top = 34
+          end
+          inherited EHeight: TEdit
+            Top = 66
+          end
+          inherited UDHeight: TUpDown
+            Top = 66
+          end
+          inherited CBAspect: TCheckBox
+            Top = 92
+          end
+          inherited CBPicSize: TCheckBox
+            TabOrder = 6
+          end
+          object CBFullSize: TCheckBox
+            Left = 19
+            Top = 12
+            Width = 97
+            Height = 17
+            Caption = '&Full size'
+            Checked = True
+            State = cbChecked
+            TabOrder = 5
+            OnClick = CBFullSizeClick
+          end
+        end
+      end
+      inherited Panel2: TPanel
+        Top = 201
+        Width = 372
+      end
+    end
+    inherited TabData: TTabSheet
+      inherited Panel3: TPanel
+        Left = 227
+        Width = 145
+        Height = 215
+        inherited GroupBox1: TGroupBox
+          Visible = False
+        end
+      end
+      inherited Panel5: TPanel
+        Width = 227
+        Height = 215
+        inherited Label3: TLabel
+          Visible = False
+        end
+        inherited CBSeries: TComboFlat
+          Visible = False
+        end
+      end
+    end
+  end
+  inherited Panel1: TPanel
+    Top = 243
+    Width = 380
+  end
+end

@@ -1,0 +1,5 @@
+#ifndef MY_ASSERT_WITH_SAVE_LOG_HEADER_INCLUDED__________
+#define MY_ASSERT_WITH_SAVE_LOG_HEADER_INCLUDED__________
+
+
+#endif
