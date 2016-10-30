@@ -12,11 +12,20 @@
 #include "..\my_include\free_types_.h"
 #include "..\my_include\MyPort.hpp"
 #include "MasterSlaveIOSettings.hpp"
+#include "MyExcpt.hpp"
 
 class MasterSlaveIOImpl;
 namespace Inifiles
 {
     class TIniFile;
+};
+
+
+class ModbusException : public MyException
+{
+public:
+    ModbusException(const FileLine& loc, const AnsiString& msg,
+        const PMyExcpt nest = PMyExcpt() );
 };
 
 class ModbusAdapter : public boost::noncopyable

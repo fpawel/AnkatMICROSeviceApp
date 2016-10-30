@@ -11,6 +11,7 @@
 
 class TransferManagerT;
 class A7664Adpt;
+class ModbusAdapter;
 
 class CtrlSysImpl : public boost::noncopyable
 {
@@ -19,6 +20,8 @@ public:
     void SetupDialog();
 
     A7664Adpt& GetA7664Adpt();
+    ModbusAdapter& Modbus();
+
     void AddInitializeTask();
     
     bool MustShowFlasLog() const;

@@ -1,7 +1,7 @@
-//------------------------------------------------------------------------------
-#ifndef ANKAT_MICRO_DEFINITIONS_HEADER_INCLUDED_______
-#define ANKAT_MICRO_DEFINITIONS_HEADER_INCLUDED_______
-//------------------------------------------------------------------------------
+#ifndef amcrH
+#define amcrH
+
+
 #include <system.hpp>
 #include <map>
 
@@ -69,30 +69,32 @@ namespace AnkatMicro
     AnsiString FormatItem(const ArchItem& itm);
     bool IsMinuteMinuteEvent(const ArchItem& itm, unsigned n);
     //--------------------------------------------------------------------------
-    struct CellContext
+    struct Sensor
     {
         unsigned type;
         TDateTime dateTime;
         double conc0, conc3, lim1, lim2;
+        // коэффициент 1-ой степени концентрации, по умолчанию 1 
+        double concCoef;
     };
     //--------------------------------------------------------------------------
     namespace Gas
-    {
-        typedef enum {O2,CO,NO,NO2,SO2,H2S,HCl,NH3,CL2,RSH,NO_FLASH,
-        CO2_2,
-		CO2_5,
-		CO2_10,
-        C3H8,
-		summCH,
-		CH4,
-        COUNT} GasType;
+    {   
+
+        typedef enum {
+            O2, CO, NO, NO2, SO2, H2S, HCl, NH3, CL2, RSH, NO_FLASH,
+            CO2_2, CO2_5, CO2_10,
+            C3H8, summCH, CH4,
+            COUNT
+        } GasType;
+
         AnsiString Caption(unsigned idx);
         AnsiString units(unsigned idx);
     };
     //--------------------------------------------------------------------------
     namespace Hard
     {
-        void GetCellContext(CellContext *cellContext);
+        void GetSensors(Sensor *sensors);
         void SetCurrentDateTime();
         AnsiString GetSoftVersion();
         void GetHourItem(unsigned addy, ArchItem& itm);
@@ -197,11 +199,7 @@ namespace AnkatMicro
     //--------------------------------------------------------------------------
     typedef std::map< TDateTime, AnkatMicro::ArchItem> ArchMapT;
 
-//------------------------------------------------------------------------------
 }; //namespace AnkatMicro
-//------------------------------------------------------------------------------
-
-
 
 
 #endif

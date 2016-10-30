@@ -29,6 +29,9 @@
 #include "uAppSetsDlg.h"
 #include "MyModFN.hpp"
 #include "a7664adpt.h"
+#include "ModbusAdapter.h"
+#include "modbus_.h"
+
 
 
 //------------------------------------------------------------------------------
@@ -57,6 +60,8 @@ public:
     void SetupDialog();
 
     A7664Adpt& GetA7664Adpt() { return a7664Adpt_; }
+    ModbusAdapter& Modbus() { return modbusAdapter_; }
+
     void AddInitializeTask();
 
     bool MustShowFlasLog() const{ return mustShowFlasLog_; }
@@ -69,10 +74,10 @@ private:
     MasterSlaveIOSettings ioSets_;
     MasterSlaveIOImpl masterSlave_;
     A7664Adpt a7664Adpt_;
+    ModbusAdapter modbusAdapter_;
     boost::shared_ptr<void> connectOnTransferManager_;
     bool mustShowFlasLog_;
-    void OnNoAnswer();
-    void OnNotifyEndTransfer(unsigned state	);
+
     void OnTNotifyChangeComport(unsigned state, const MyPort& port, const void*, int);
     void OnTransferManager(unsigned state, const AnsiString&);
 };
@@ -84,6 +89,7 @@ CtrlSysImpl::Impl::Impl() :
     ioSets_(),
     masterSlave_( ioSets_ ),
     a7664Adpt_( masterSlave_ ),
+        modbusAdapter_( ioSets_ ),
     connectOnTransferManager_( tmngr_.ConnectOnReportState(OnTransferManager) )
 {
     ASSERT_FUNCTION_CALLED_ONCE__;
@@ -96,8 +102,7 @@ CtrlSysImpl::Impl::Impl() :
 
     LoadMasterSlaveIOSettingsFromFile( ioSets_, ini_, MASTER_SLAVE_IO_SETTINGS_SEKT );
     masterSlave_.SetIOPort( &rs232_ );
-    masterSlave_.SetOnNoAnswer( &OnNoAnswer );
-    a7664Adpt_.SetNotifyEndTransfer( &OnNotifyEndTransfer );
+    modbusAdapter_.SetIOPort( &rs232_ );
     //for(unsigned n=0; n<3; ++n) spanGasConc_[n] = ini_->ReadFloat( MAIN_INI_ID, "ÏÃÑ"+IntToStr(n+1), 1 );
 
     mustShowFlasLog_ = ini_->ReadBool(MAIN_INI_ID, "ïîêàçûâàòü ôëýø", 0);
@@ -146,16 +151,6 @@ void CtrlSysImpl::Impl::OnTNotifyChangeComport(unsigned state, const MyPort& por
         Form1->SetStatus( "", 2 );
         Form1->panelConnect->Caption = "";
     }
-}
-//------------------------------------------------------------------------------
-void CtrlSysImpl::Impl::OnNotifyEndTransfer(unsigned state	)
-{
-
-}
-//------------------------------------------------------------------------------
-void CtrlSysImpl::Impl::OnNoAnswer()
-{
-    
 }
 //------------------------------------------------------------------------------
 void CtrlSysImpl::Impl::SetupDialog()
@@ -231,6 +226,10 @@ A7664Adpt& CtrlSysImpl::GetA7664Adpt()
 {
     return impl_->GetA7664Adpt();
 }
-//------------------------------------------------------------------------------
+
+ModbusAdapter& CtrlSysImpl::Modbus()
+{
+    return impl_->Modbus();
+}
 
 

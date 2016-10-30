@@ -49,7 +49,6 @@ void PerformDelay(TBoolMthd mthd, unsigned tm)
 MasterSlaveIOImpl::MasterSlaveIOImpl(const MasterSlaveIOSettings &sets) :
     mainThreadId_( ::GetCurrentThreadId() ),
     tmngr_( TransferManager::Instance() ),
-    onNoAnswer_(NULL),
     port_(NULL), sets_(sets)
 {   
 }
@@ -86,9 +85,9 @@ void MasterSlaveIOImpl::Send(	const char* sendBegin, const char* sendEnd, bool n
         ::Sleep(sets_.tmWriteDelay_);
     OpenPort();
     if(!needAnswer)
-        SendTxD();
-    else
-        SendTxDAndGetAnswer();
+            SendTxD();
+        else
+            SendTxDAndGetAnswer();
 }
 //------------------------------------------------------------------------------
 void MasterSlaveIOImpl::SendTxD()
@@ -156,7 +155,6 @@ void MasterSlaveIOImpl::SendTxDAndGetAnswer()
     else
     {
         LogOut( " нет ответа!\n" );
-        if(onNoAnswer_) onNoAnswer_();
         //MY_THROW_(port_->Description()+" не отвечает!");
         MY_THROW_CLASS_(MyNoAnswerException, port_->Description()+" не отвечает!");
     }

@@ -2,6 +2,6 @@
 #ifndef AmcrUtilsImplH
 #define AmcrUtilsImplH
 //------------------------------------------------------------------------------
-#include "amcr.hpp"
+#include "amcr.h"
 
 #endif

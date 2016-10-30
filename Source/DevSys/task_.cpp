@@ -5,26 +5,28 @@
 
 #include "task_.h"
 
-#include "unit1.h"
-
-//std
 #include <iostream>
+#include <Math.hpp>
 #include <DateUtils.hpp>
+
+#include "Unit1.h"
+#include "amcr.h"
 #include "AnsiStringUtils_.h"
 #include "IOProtocols.hpp"
 #include "TransferManage.h"
 #include "guicon.h"
-#include "Unit1.h"
+
 #include "MyExcpt.hpp"
 //#include "MySynchronize.h"
 #include "myconv.h"
 #include "ctrlsys.h"
 #include "MasterSlaveIO.h"
 #include "uFrmWait.h"
-#include "amcr.hpp"
+#include "amcr.h"
 #include "SGrdHlpr.h"
 #include "AmcrArch.h"
 #include "MySynchronize.h"
+#include "modbus_.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 //---------------------------------------------------------------------------
@@ -43,33 +45,78 @@ void PerformInitializeDevice()
         Form1->Panel12->Font->Color = clNavy;
     }
 
-    tmngr.ShowTopPanel( "Запрос контекста..." );
-    AnkatMicro::CellContext cntxt[4];
-    AnkatMicro::Hard::GetCellContext(cntxt);
+    tmngr.ShowTopPanel( "Запрос версии ПО..." );
+
+
+
+    AnkatMicro::Hard::GetSensors(Form1->sensors);
+
     my::Grd::ClearTStringGrid(Form1->grd1, 1,1);
+
+    MyWCout( "\n" );
+    double kefYear = ReadKef(CtrlSys().Instance().Modbus(), 1, 2);
+    MyWCout(AnsiString().sprintf("kef year - %g\n", kefYear) );
+
     for( unsigned i=0; i<4; ++i )
     {
-        if( cntxt[i].dateTime.Val != 0) {
 
-            Form1->grd1->Cells[i+1][2] = MyFormatDateTime( cntxt[i].dateTime);
+        Form1->sensors[i].concCoef = 1; // коэффициент 1-ой степени концентрации, по умолчанию 1
+
+        if( Form1->sensors[i].dateTime.Val != 0) {
+
+            Form1->grd1->Cells[i+1][2] = MyFormatDateTime( Form1->sensors[i].dateTime);
         }
 
-        AnsiString sgas = AnkatMicro::Gas::Caption(cntxt[i].type);
-        AnsiString sunits = AnkatMicro::Gas::units(cntxt[i].type);
+        AnsiString sgas = AnkatMicro::Gas::Caption(Form1->sensors[i].type);
+        AnsiString sunits = AnkatMicro::Gas::units(Form1->sensors[i].type);
         if(sunits!="") {
             sgas = sgas + ", " + sunits;
         }
 
-        Form1->hasSensor[i] = (cntxt[i].type < AnkatMicro::Gas::COUNT) && cntxt[i].conc3 > 0 && (sgas!="");
+        Form1->hasSensor[i] = (Form1->sensors[i].type < AnkatMicro::Gas::COUNT) && Form1->sensors[i].conc3 > 0 && (sgas!="");
 
         if(Form1->hasSensor[i]) {
             Form1->grd1->Cells[i+1][1] = sgas;
             Form1->SetChanalTitle(i, Form1->grd1->Cells[i+1][1]);
-            Form1->grd1->Cells[i+1][3] = cntxt[i].conc0;
-            Form1->grd1->Cells[i+1][4] = cntxt[i].conc3;
-            Form1->grd1->Cells[i+1][5] = cntxt[i].lim1;
-            Form1->grd1->Cells[i+1][6] = cntxt[i].lim2;
+            Form1->grd1->Cells[i+1][3] = Form1->sensors[i].conc0;
+            Form1->grd1->Cells[i+1][4] = Form1->sensors[i].conc3;
+            Form1->grd1->Cells[i+1][5] = Form1->sensors[i].lim1;
+            Form1->grd1->Cells[i+1][6] = Form1->sensors[i].lim2;
             Form1->serH.conc[i]->Visible = true;
+            //
+            // РАСЧЁТ cntxt[i].concCoef
+            //
+            // если канал электрохимии 1 или 2, то надо определить его единицы измерения
+            // возможно это %НКПР
+            // для 1 - коэф.5, для 2 - коеф.14
+
+            bool isSensor1 = (i == 0);
+            bool isSensor2 = (i == 1);
+
+            bool isSensor_1_or_2 = isSensor1 || isSensor2;
+
+
+            bool isC3H8 = (Form1->sensors[i].type == AnkatMicro::Gas::C3H8);
+            bool issummCH = (Form1->sensors[i].type == AnkatMicro::Gas::summCH);
+            bool isCH4 = (Form1->sensors[i].type == AnkatMicro::Gas::CH4);
+
+            bool isCH = isCH4 || isC3H8 || issummCH;
+
+            if (isSensor_1_or_2 && isCH) {
+                int coefUnitsNum = isSensor1 ? 5 : 14;
+                // считать значение коеффициента
+                double coefUnitsValue = ReadKef(CtrlSys().Instance().Modbus(), 1, coefUnitsNum);
+                MyWCout(AnsiString().sprintf("%d: coef units [%d] = %g\n", i, coefUnitsNum, coefUnitsValue) );
+                int coefUnitsValue_int = (int)Ceil(coefUnitsValue);
+                if (coefUnitsValue_int==4) { // 4 - код %НКПР
+                    // коэффициент 1-ой степени концентрации, по умолчанию 1
+                    if (isCH4) {
+                        Form1->sensors[i].concCoef = 1.4 / 100.0;
+                    } else if (isC3H8 || issummCH ) {
+                        Form1->sensors[i].concCoef = 0.13 / 100.0;
+                    }
+                }
+            }
         } else {
             Form1->SetChanalTitle(i, "Канал " + IntToStr(i+1) );
             Form1->serH.conc[i]->Visible = false;

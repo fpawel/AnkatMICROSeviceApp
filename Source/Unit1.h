@@ -36,7 +36,7 @@
 
 
 //------------------------------------------------------------------------------
-#include "amcr.hpp"
+#include "amcr.h"
 //------------------------------------------------------------------------------
 class TransferManagerT;
 class CtrlSysImpl;
@@ -109,10 +109,10 @@ private:	// User declarations
 
     TFrameGraph *grphHour, *grphMinute;
 
-	// колличество панелей статуса
+	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     enum{ STATUS_PNLS_COUNT = 4 };
 
-    // правые панели
+    // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
     TPanel* pnStatus_[STATUS_PNLS_COUNT];
     PVoid connectOnTransferManagerReport_, connectOnGetHourItem_, connectOnGetMinuteItem_;
 
@@ -196,6 +196,8 @@ public:		// User declarations
 
     TChart *hoursChart, *minutesChart;
     bool hasSensor[4];
+
+    AnkatMicro::Sensor sensors[4];
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TForm1 *Form1;

@@ -168,7 +168,7 @@ void GetMinuteItem(unsigned addy, ArchItem& itm)
     MyWCout(FormatMinuteItem(itm)+"\n", MY_SET_CONSOLE_VELVET_TEXT);
 }
 //------------------------------------------------------------------------------
-void GetCellContext(CellContext *cntxts)
+void GetSensors(Sensor *sensors)
 {
     enum { CNT = 4 };
     const unsigned mainBuffAddy[CNT] = {0x0000, 0x1000, 0x2000, 0x3000};
@@ -176,21 +176,21 @@ void GetCellContext(CellContext *cntxts)
     {
         MyWCout( MYSPRINTF_( "Обращение к контексту ячейки %d\n", nCll), MY_SET_CONSOLE_VELVET_TEXT);
         const unsigned addy0 = mainBuffAddy[nCll];
-        CellContext &cntxt = cntxts[nCll];
-        cntxt.type = Flash::ReadByte(addy0)
+        Sensor &sensor = sensors[nCll];
+        sensor.type = Flash::ReadByte(addy0)
             //+ Flash::ReadByte(addy0 + 1) - 1
             ;
-        cntxt.conc0 = Flash::ReadWord( addy0 + 0x02)/100.0;
-        cntxt.conc3 = Flash::ReadWord( addy0 + 0x04)/100.0;
-        cntxt.lim1 = Flash::ReadWord( addy0 + 0x10)/100.0;
-        cntxt.lim2 = Flash::ReadWord( addy0 + 0x12)/100.0;
+        sensor.conc0 = Flash::ReadWord( addy0 + 0x02)/100.0;
+        sensor.conc3 = Flash::ReadWord( addy0 + 0x04)/100.0;
+        sensor.lim1 = Flash::ReadWord( addy0 + 0x10)/100.0;
+        sensor.lim2 = Flash::ReadWord( addy0 + 0x12)/100.0;
 
         unsigned char dt[6];
         Flash::Read(addy0+0x0a, dt, 6);
 
-        cntxt.dateTime = ExtractDateTime( dt[3], dt[4], dt[5], dt[0], dt[1] );
+        sensor.dateTime = ExtractDateTime( dt[3], dt[4], dt[5], dt[0], dt[1] );
         MyWCout( MYSPRINTF_( "ПГС0=%g, ПГС3=%g, Порог 1=%g, Порог 2=%g\n",
-            cntxt.conc0, cntxt.conc3, cntxt.lim1, cntxt.lim2 ), MY_SET_CONSOLE_VELVET_TEXT);
+            sensor.conc0, sensor.conc3, sensor.lim1, sensor.lim2 ), MY_SET_CONSOLE_VELVET_TEXT);
     }
 }
 //------------------------------------------------------------------------------

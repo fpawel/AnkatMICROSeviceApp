@@ -29,7 +29,7 @@ namespace Inifiles
 //------------------------------------------------------------------------------
 class MasterSlaveIOImpl : public boost::noncopyable
 {
-typedef void (__closure *TOnNoAnswer)();
+
 public:
     explicit MasterSlaveIOImpl( const MasterSlaveIOSettings &sets );
     ~MasterSlaveIOImpl();
@@ -45,16 +45,12 @@ public:
     void OpenPort();
     void ClosePort();
     void SetIOPort(MyPort* port);
-    void SetOnNoAnswer( TOnNoAnswer onNoAnswer)
-    {
-        onNoAnswer_ = onNoAnswer;
-    }
+
 private:
     const unsigned mainThreadId_;
 	TransferManagerT& tmngr_;
     MyPort* port_;
     std::vector<char> rxd_, txd_;
-    TOnNoAnswer onNoAnswer_;
     const MasterSlaveIOSettings& sets_;
     void SendTxD();
 

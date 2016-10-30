@@ -42,36 +42,50 @@ bool IsModbusStr(const uInt8 *b, const uInt8 *e, uInt8 devAddr, uInt8 commandCod
     ( b[1]==commandCode || b[1]==( commandCode | 0x80 ) ) &&
     GetCRC16( b, e )==0;
 }
-//------------------------------------------------------------------------------
-#define THROW_TRANSFER_EXCEPTION_(CNTXT, MSG)\
-	throw PMyExcpt( new MyTransferException(TRANSFER_EXCEPTION::##CNTXT##,\
-    __FILE_LINE__, MYSPRINTF_("%d: %s", addy, MSG) ) )
-//------------------------------------------------------------------------------
+
+void fail(AnsiString s) {
+    MyWCout(s, MY_SET_CONSOLE_RED_TEXT );
+    throw PMyExcpt( new MyException(__FILE_LINE__, s) );
+}
+
 void CheckModbusStr(ByteBuffPtr reciveBegin, ByteBuffPtr reciveEnd,
     unsigned addy, unsigned commandCode)
 {
 	if( addy==0) return;
 	const int rxdLen = reciveEnd - reciveBegin;
     assert(rxdLen>=0);
-    if( rxdLen==0 ) THROW_TRANSFER_EXCEPTION_( NO_ANSWER, "не отвечает" );
-    if( rxdLen<4 )
-    	THROW_TRANSFER_EXCEPTION_( LESS_THEN_4,
-    		MYSPRINTF_(" длина ответа %s равна %d, должна быть не менее 4",
-        		MyBuffToStr1( reciveBegin, reciveEnd ), rxdLen) );
-    if( (unsigned)reciveBegin[0]!=addy )
-    	THROW_TRANSFER_EXCEPTION_( ADDRESS_MISMATCH,
-    		MYSPRINTF_("несовпадение адрессов запроса %d и ответа %d",
-        		addy,  reciveBegin[0] ) ) ;
+    AnsiString s;
+    if( rxdLen==0 ) {
+        s.sprintf("%d: %s", addy, "не отвечает");
+        fail(s);
+    }
+
+    if( rxdLen<4 ){
+        s.sprintf(" длина ответа %s равна %d, должна быть не менее 4",
+            MyBuffToStr1( reciveBegin, reciveEnd ), rxdLen);
+        fail(s);
+    }
+
+    if( (unsigned)reciveBegin[0]!=addy ){
+        s.sprintf("несовпадение адрессов запроса %d и ответа %d",
+        		addy,  reciveBegin[0]);
+        fail(s);
+    }
+
     const bool
         cmdCodeMatch = ( (unsigned)reciveBegin[1]==commandCode ),
         modbusError = ( (unsigned)reciveBegin[1]==( commandCode | 0x80 ) );
 
-    if( !cmdCodeMatch && !modbusError )
-        THROW_TRANSFER_EXCEPTION_( COMMAND_MISMATCH,
-        	MYSPRINTF_("несовпадение кодов комманд запроса %d и ответа %d", commandCode, reciveBegin[1] ));
+    if( !cmdCodeMatch && !modbusError ){
+        s.sprintf("несовпадение кодов комманд запроса %d и ответа %d", commandCode, reciveBegin[1]);
+        fail(s);
+    }
 
-    if( GetCRC16( reciveBegin, reciveEnd )!=0 )
-    	THROW_TRANSFER_EXCEPTION_( NOT_NULL_CRC16, "ненулевая контрольная сумма ответа");
+
+    if( GetCRC16( reciveBegin, reciveEnd )!=0 ){
+        fail("ненулевая контрольная сумма ответа");
+    }
+
 
     assert( IsModbusStr(reciveBegin, reciveEnd, addy, commandCode ) );
 }
@@ -98,7 +112,7 @@ void ModbusAdapter::SetIOPort(MyPort *port)
 // Передать txd, считать данные приёмника в rxd, вернуть длительность трансфера
 void ModbusAdapter::PerformTransfer( unsigned addy,
     unsigned commandCode, ByteBuffPtr sendBegin, ByteBuffPtr sendEnd )
-{   
+{
 	const int sendStrLen = sendEnd - sendBegin;
     assert(sendStrLen<10000);
     assert( commandCode!=3 || sendStrLen==4 );
@@ -118,25 +132,28 @@ void ModbusAdapter::PerformTransfer( unsigned addy,
     if( !needAnswer || masterSlaveIO_->IsTransferManagerWasStopedOrTerminated()  ) return;
     const unsigned rxdSize = masterSlaveIO_->RxDSize();
     if( rxdSize==0 )
-        THROW_TRANSFER_EXCEPTION_( NO_ANSWER, "не отвечает" );
+        fail( "не отвечает" );
 
     const unsigned char *rxd = masterSlaveIO_->RxD(), *rxdEnd = rxd + rxdSize;
 
     // проверка корректности rxd_ - возбуждаются исключения
     CheckModbusStr( rxd, rxdEnd, addy, commandCode );
 
+    AnsiString s;
+
     if( rxdSize==5 && ( rxd[1] == (commandCode | 0x80) ) )
     {
     	if( commandCode==3 && rxd[2]==2 )
         {
         	const unsigned regAdr = (sendBegin[0]<<8) + sendBegin[1];
-    		THROW_TRANSFER_EXCEPTION_( CMD3_ADDRESS_NOT_SUPPORTED,
-            	MYSPRINTF_("команда 3, адрес регистра %d не допустим для данного прибора", regAdr ) );
+    		s.sprintf("команда 3, адрес регистра %d не допустим для данного прибора", regAdr ) ;
+            fail(s);
         }
 
-    	if( rxd[2]!=0 )
-    		THROW_TRANSFER_EXCEPTION_( MODBUS_EXCEPTION,
-            	MYSPRINTF_("исключительная ситуация %d.", rxd[2] ) );
+    	if( rxd[2]!=0 ){
+            s.sprintf("исключительная ситуация %d.", rxd[2] ) ;
+            fail(s);
+        }
     }
 
 }
@@ -173,6 +190,8 @@ unsigned ModbusAdapter::CommandCode() const
     return masterSlaveIO_->RxDSize()>1 ? masterSlaveIO_->RxD()[1] : -1;
 }
 //------------------------------------------------------------------------------
+
+
 
 
 

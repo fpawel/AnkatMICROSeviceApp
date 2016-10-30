@@ -3,7 +3,7 @@
 #define AmcrArchH
 //------------------------------------------------------------------------------
 
-#include "amcr.hpp"
+#include "amcr.h"
 #include "..\my_include\MyNoDestroySingleton.hpp"
 
 #include "boost\noncopyable.hpp"
