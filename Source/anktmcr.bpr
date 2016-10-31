@@ -46,7 +46,7 @@
     <SYSDEFINES value="NO_STRICT;USEPACKAGES"/>
     <MAINSOURCE value="anktmcr.cpp"/>
     <INCLUDEPATH value="F:\CBuilder6\Projects;VCLUtils\Dlg;WinUtils;Dialogs;Application;ComPort;DevSys;Excpt;VCLUtils;$(BCB)\bin;$(BCB)\include;$(BCB)\include\vcl;my_include;my_include\win"/>
-    <LIBPATH value="F:\CBuilder6\Projects;..\TeeChart\Bpi;..\TeeChart\Sources\Compiled\Builder6\Lib;..\TeeChart\TeeTree\Compiled\Builder6\Lib;VCLUtils\Dlg;WinUtils;Dialogs;$(BCB)\Projects\Lib;Application;ComPort;DevSys;Excpt;VCLUtils;$(BCB)\Bin;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <LIBPATH value="F:\TeeChart_Pro_8_06_Source\Sources\Compiled\Builder6\Lib;F:\CBuilder6\Projects;..\TeeChart\Bpi;..\TeeChart\Sources\Compiled\Builder6\Lib;..\TeeChart\TeeTree\Compiled\Builder6\Lib;VCLUtils\Dlg;WinUtils;Dialogs;$(BCB)\Projects\Lib;Application;ComPort;DevSys;Excpt;VCLUtils;$(BCB)\Bin;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par"/>
     <OTHERFILES value=""/>
   </MACROS>

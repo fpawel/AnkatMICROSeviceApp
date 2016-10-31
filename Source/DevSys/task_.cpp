@@ -33,6 +33,11 @@
 using std::cout;
 //------------------------------------------------------------------------------
 bool isInitialized = false;
+
+AnsiString boolToStr(bool x) {
+    return x ? "true" : "false";
+}
+
 //------------------------------------------------------------------------------
 void PerformInitializeDevice()
 {
@@ -69,15 +74,18 @@ void PerformInitializeDevice()
 
         AnsiString sgas = AnkatMicro::Gas::Caption(Form1->sensors[i].type);
         AnsiString sunits = AnkatMicro::Gas::units(Form1->sensors[i].type);
+        AnsiString strSensor = sgas;
         if(sunits!="") {
-            sgas = sgas + ", " + sunits;
+            strSensor = strSensor + ", " + sunits;
         }
 
-        Form1->hasSensor[i] = (Form1->sensors[i].type < AnkatMicro::Gas::COUNT) && Form1->sensors[i].conc3 > 0 && (sgas!="");
+        Form1->hasSensor[i] = (Form1->sensors[i].type < AnkatMicro::Gas::COUNT) && Form1->sensors[i].conc3 > 0 && (strSensor!="");
 
         if(Form1->hasSensor[i]) {
-            Form1->grd1->Cells[i+1][1] = sgas;
-            Form1->SetChanalTitle(i, Form1->grd1->Cells[i+1][1]);
+
+            Form1->grd1->Cells[i+1][1] = strSensor;
+            Form1->SetChanalTitle(i, strSensor);
+
             Form1->grd1->Cells[i+1][3] = Form1->sensors[i].conc0;
             Form1->grd1->Cells[i+1][4] = Form1->sensors[i].conc3;
             Form1->grd1->Cells[i+1][5] = Form1->sensors[i].lim1;
@@ -90,31 +98,41 @@ void PerformInitializeDevice()
             // возможно это %НКПР
             // для 1 - коэф.5, для 2 - коеф.14
 
-            bool isSensor1 = (i == 0);
-            bool isSensor2 = (i == 1);
-
-            bool isSensor_1_or_2 = isSensor1 || isSensor2;
 
 
             bool isC3H8 = (Form1->sensors[i].type == AnkatMicro::Gas::C3H8);
             bool issummCH = (Form1->sensors[i].type == AnkatMicro::Gas::summCH);
             bool isCH4 = (Form1->sensors[i].type == AnkatMicro::Gas::CH4);
-
             bool isCH = isCH4 || isC3H8 || issummCH;
 
-            if (isSensor_1_or_2 && isCH) {
-                int coefUnitsNum = isSensor1 ? 5 : 14;
+            bool isIkd1 = (isCH && i == 2);
+            bool isIkd2 = (isCH && i == 3);
+            bool isIkd = isIkd1 || isIkd2;
+
+            MyWCout(AnsiString().sprintf("Канал %d : %s %s, \n", i, sgas, sunits) );
+
+            MyWCout(AnsiString().sprintf("ИКД1 %s, ИКД2 %s, CH4 %s, C3H8 %s, sumCH %s\n",
+                boolToStr(isIkd1),
+                boolToStr(isIkd2),
+                boolToStr(isCH4),
+                boolToStr(isC3H8),
+                boolToStr(issummCH)
+
+                ));
+
+            if (isIkd) {
+                int coefUnitsNum = isIkd1 ? 5 : 14;
                 // считать значение коеффициента
                 double coefUnitsValue = ReadKef(CtrlSys().Instance().Modbus(), 1, coefUnitsNum);
-                MyWCout(AnsiString().sprintf("%d: coef units [%d] = %g\n", i, coefUnitsNum, coefUnitsValue) );
+                MyWCout(AnsiString().sprintf("Канал %d: coef units [%d] = %g\n", i, coefUnitsNum, coefUnitsValue) );
                 int coefUnitsValue_int = (int)Ceil(coefUnitsValue);
-                if (coefUnitsValue_int==4) { // 4 - код %НКПР
+                if (coefUnitsValue_int==3) { // 3 - код об.доли.
+
                     // коэффициент 1-ой степени концентрации, по умолчанию 1
-                    if (isCH4) {
-                        Form1->sensors[i].concCoef = 1.4 / 100.0;
-                    } else if (isC3H8 || issummCH ) {
-                        Form1->sensors[i].concCoef = 0.13 / 100.0;
-                    }
+                    Form1->sensors[i].concCoef = isCH4 ? (4.4 / 100.0) : (1.7 / 100.0);
+                    strSensor = sgas + ", % об.д." ;
+                    Form1->grd1->Cells[i+1][1] = strSensor;
+                    Form1->SetChanalTitle(i, strSensor);
                 }
             }
         } else {

@@ -371,7 +371,7 @@ LRESULT TForm1::ShowHoursArchive1(  std::vector<AnkatMicro::ArchItem> items )
             const double conc = itm.conc[i];
             if(conc<2000 //&& hasSensor[i]
             )
-                serH.conc[i]->AddXY( dt, itm.conc[i] );
+                serH.conc[i]->AddXY( dt, itm.conc[i] * this->sensors[i].concCoef );
         }
     }
 }
@@ -390,7 +390,7 @@ LRESULT TForm1::ShowMinutesArchive1( std::vector<AnkatMicro::ArchItem> items )
             const double conc = itm.conc[i];
             if(conc<2000 //&& hasSensor[i]
             )
-                serM.conc[i]->AddXY( dt, itm.conc[i] );
+                serM.conc[i]->AddXY( dt, itm.conc[i] * this->sensors[i].concCoef );
         }
     }
 }
@@ -433,7 +433,7 @@ LRESULT TForm1::ShowHoursArchive( const RequestArchiveHandle &hnd )
             const double conc = itm.conc[i];
             if(conc<2000 //&& hasSensor[i]
             )
-                serH.conc[i]->AddXY( dt, itm.conc[i] );
+                serH.conc[i]->AddXY( dt, itm.conc[i] * this->sensors[i].concCoef );
         }
     }
 
@@ -481,7 +481,7 @@ LRESULT TForm1::ShowMinutesArchive( const RequestArchiveHandle &hnd )
         {
             const double conc = itm.conc[i];
             //if(hasSensor[i]) {
-                serM.conc[i]->AddXY( dt, itm.conc[i] );
+                serM.conc[i]->AddXY( dt, itm.conc[i] * this->sensors[i].concCoef );
             //}
         }
     }
