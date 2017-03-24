@@ -88,8 +88,8 @@ void PerformInitializeDevice()
 
             Form1->grd1->Cells[i+1][3] = Form1->sensors[i].conc0;
             Form1->grd1->Cells[i+1][4] = Form1->sensors[i].conc3;
-            Form1->grd1->Cells[i+1][5] = Form1->sensors[i].lim1;
-            Form1->grd1->Cells[i+1][6] = Form1->sensors[i].lim2;
+            Form1->grd1->Cells[i+1][5] = AnsiString().sprintf( "%.2f", Form1->sensors[i].lim1);
+            Form1->grd1->Cells[i+1][6] = AnsiString().sprintf( "%.2f", Form1->sensors[i].lim2);
             Form1->serH.conc[i]->Visible = true;
             //
             // ÐÀÑ×¨Ò cntxt[i].concCoef
