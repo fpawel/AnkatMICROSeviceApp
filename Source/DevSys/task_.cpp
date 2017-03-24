@@ -129,10 +129,24 @@ void PerformInitializeDevice()
                 if (coefUnitsValue_int==3) { // 3 - код об.доли.
 
                     // коэффициент 1-ой степени концентрации, по умолчанию 1
-                    Form1->sensors[i].concCoef = isCH4 ? (4.4 / 100.0) : (1.7 / 100.0);
+                    double Kconc = isCH4 ? (4.4 / 100.0) : (1.7 / 100.0);
+                    Form1->sensors[i].concCoef = Kconc;
                     strSensor = sgas + ", % об.д." ;
                     Form1->grd1->Cells[i+1][1] = strSensor;
                     Form1->SetChanalTitle(i, strSensor);
+
+                    Form1->grd1->Cells[i+1][3] =
+                        AnsiString().sprintf( "%.2f", Form1->sensors[i].conc0 * Kconc);
+
+                    Form1->grd1->Cells[i+1][4] =
+                        AnsiString().sprintf( "%.2f", Form1->sensors[i].conc3 * Kconc);
+
+
+                    Form1->grd1->Cells[i+1][5] =
+                        AnsiString().sprintf( "%.2f", Form1->sensors[i].lim1 * Kconc);
+                    Form1->grd1->Cells[i+1][6] =
+                        AnsiString().sprintf( "%.2f", Form1->sensors[i].lim2 * Kconc);
+
                 }
             }
         } else {
