@@ -23,8 +23,10 @@ public:
     ModbusAdapter& Modbus();
 
     void AddInitializeTask();
+    void AddSetDevDateTask();
     
     bool MustShowFlasLog() const;
+    double KConc() const;
 
 private:
     class Impl;

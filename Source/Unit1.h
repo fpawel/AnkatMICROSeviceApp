@@ -87,6 +87,7 @@ __published:	// IDE-managed Components
     TImage *Image2;
     TMenuItem *N1;
     TStringGrid *grdEvt;
+    TButton *Button1;
 	void __fastcall FormActivate(TObject *Sender);
 	void __fastcall ScrollBox1CanResize(TObject *Sender, int &NewWidth,
           int &NewHeight, bool &Resize);
@@ -95,12 +96,13 @@ __published:	// IDE-managed Components
     void __fastcall N11Click(TObject *Sender);
     void __fastcall grdVarsKeyDown(TObject *Sender, WORD &Key,
           TShiftState Shift);
-    void __fastcall btnCicleRunClick(TObject *Sender);
     void __fastcall SpeedButton1Click(TObject *Sender);
     void __fastcall N12Click(TObject *Sender);
     void __fastcall grdEvtDblClick(TObject *Sender);
     void __fastcall Image2Click(TObject *Sender);
     void __fastcall menuConsoleClick(TObject *Sender);
+    void __fastcall btnCicleRunClick(TObject *Sender);
+    void __fastcall Button1Click(TObject *Sender);
 private:	// User declarations
     TransferManagerT& tmngr_;
     CtrlSysImpl& ctrlSys_;
@@ -124,7 +126,7 @@ private:	// User declarations
     
     AnkatMicro::ArchMapT minutes_, hours_;
 
-    void ShowEvents();
+    //void ShowEvents();
 
     // HandleTransfer.cpp
     void HandleException();

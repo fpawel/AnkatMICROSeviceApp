@@ -66,7 +66,9 @@ public:
 
     bool MustShowFlasLog() const{ return mustShowFlasLog_; }
 
-        
+    double KConc_;
+
+    void AddSetDevDateTask();
 private:
     TransferManagerT& tmngr_;
     TIniFile* ini_;
@@ -77,6 +79,8 @@ private:
     ModbusAdapter modbusAdapter_;
     boost::shared_ptr<void> connectOnTransferManager_;
     bool mustShowFlasLog_;
+
+
 
     void OnTNotifyChangeComport(unsigned state, const MyPort& port, const void*, int);
     void OnTransferManager(unsigned state, const AnsiString&);
@@ -89,8 +93,9 @@ CtrlSysImpl::Impl::Impl() :
     ioSets_(),
     masterSlave_( ioSets_ ),
     a7664Adpt_( masterSlave_ ),
-        modbusAdapter_( ioSets_ ),
-    connectOnTransferManager_( tmngr_.ConnectOnReportState(OnTransferManager) )
+    modbusAdapter_( ioSets_ ),
+    connectOnTransferManager_( tmngr_.ConnectOnReportState(OnTransferManager) ),
+    KConc_(10.)
 {
     ASSERT_FUNCTION_CALLED_ONCE__;
     rs232_.LoadSettingsFromIniFile( ini_, RS232_INI_SEKT );
@@ -106,6 +111,7 @@ CtrlSysImpl::Impl::Impl() :
     //for(unsigned n=0; n<3; ++n) spanGasConc_[n] = ini_->ReadFloat( MAIN_INI_ID, "ПГС"+IntToStr(n+1), 1 );
 
     mustShowFlasLog_ = ini_->ReadBool(MAIN_INI_ID, "показывать флэш", 0);
+    KConc_ = ini_->ReadFloat(MAIN_INI_ID, "KCONC", 10);
 }
 //------------------------------------------------------------------------------
 CtrlSysImpl::Impl::~Impl()
@@ -116,6 +122,7 @@ CtrlSysImpl::Impl::~Impl()
     rs232_.SaveSettingsToIniFile( ini_, RS232_INI_SEKT );
     SaveMasterSlaveIOSettingsToFile( ioSets_, ini_, MASTER_SLAVE_IO_SETTINGS_SEKT );
     ini_->WriteBool(MAIN_INI_ID, "показывать флэш", mustShowFlasLog_);
+    ini_->WriteFloat(MAIN_INI_ID, "KCONC", KConc_);
     //for(unsigned n=0; n<3; ++n) ini_->WriteFloat( MAIN_INI_ID, "ПГС"+IntToStr(n+1), spanGasConc_[n] );
 
 }
@@ -125,6 +132,12 @@ void CtrlSysImpl::Impl::AddInitializeTask()
     const TemporaryStopTransferManager tstm;
     tmngr_.GetTaskList().EraseTasksOfClass<InitializeDevice>();
     tmngr_.AddTask( new InitializeDevice(),TransferManagerT::ADD_TASK_HEAD );
+}
+
+void CtrlSysImpl::Impl::AddSetDevDateTask(){
+    const TemporaryStopTransferManager tstm;
+    tmngr_.GetTaskList().EraseTasksOfClass<SyncDevDate>();
+    tmngr_.AddTask( new SyncDevDate(),TransferManagerT::ADD_TASK_HEAD );
 }
 
 void CtrlSysImpl::Impl::OnTransferManager(unsigned context, const AnsiString&)
@@ -174,6 +187,7 @@ void CtrlSysImpl::Impl::SetupDialog()
     VVAl_(COMBoudRate) =  sets.dcb_.BaudRate;
 
     VVAl_(ShowFlasLog) =  mustShowFlasLog_ ? "Да" : "Нет" ;
+    VVAl_(KConc) = KConc_ ;
 
     //VVAl_(Conc1) =  spanGasConc_[0];
     //VVAl_(Conc2) =  spanGasConc_[1] ;
@@ -188,8 +202,9 @@ void CtrlSysImpl::Impl::SetupDialog()
         ioSets_.silentTime_ = StrToIntDef( VVAl_(SilentTime), 50);
         ioSets_.repeatCount_ = StrToIntDef( VVAl_(RepeatCount), 0);
         ioSets_.mustLogData_ = VVAl_(ShowComPortLog)=="Да";
-
         mustShowFlasLog_ = VVAl_(ShowFlasLog)=="Да";
+        KConc_ = MyStrToFloatDef( VVAl_(KConc), 10);
+
 
         //spanGasConc_[0] = MyStrToFloatDef( VVAl_(Conc1), 0);
         //spanGasConc_[1] = MyStrToFloatDef( VVAl_(Conc2), 0);
@@ -230,6 +245,15 @@ A7664Adpt& CtrlSysImpl::GetA7664Adpt()
 ModbusAdapter& CtrlSysImpl::Modbus()
 {
     return impl_->Modbus();
+}
+
+double CtrlSysImpl::KConc() const
+{
+        return impl_->KConc_;
+}
+
+void CtrlSysImpl::AddSetDevDateTask(){
+      impl_->AddSetDevDateTask();
 }
 
 

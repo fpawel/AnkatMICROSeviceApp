@@ -19,8 +19,8 @@ object FormAppSetsDlg: TFormAppSetsDlg
   object grd1: TStringGrid
     Left = 0
     Top = 0
-    Width = 462
-    Height = 384
+    Width = 454
+    Height = 380
     Align = alClient
     BorderStyle = bsNone
     ColCount = 3
@@ -76,8 +76,8 @@ object FormAppSetsDlg: TFormAppSetsDlg
   end
   object Panel1: TPanel
     Left = 0
-    Top = 384
-    Width = 462
+    Top = 380
+    Width = 454
     Height = 51
     Align = alBottom
     BevelOuter = bvNone

@@ -152,13 +152,15 @@ void GetMinuteItem(unsigned addy, ArchItem& itm)
 
     itm.evts = dt[6];
 
-    const double k = dt[0x0E]==0 ? 0.01 : 0.001;
+    const double k = dt[0x0E]==0 ? 0.01 : 0.001 ;
+
+    const double kConc = CtrlSys::Instance().KConc();
 
     itm.T = (char)dt[5];
-    itm.conc[0] = 10. * ExtractDeviceWord(dt+0x18)*k;
-    itm.conc[1] = 10. * ExtractDeviceWord(dt+0x1A)*k;
-    itm.conc[2] = 10. * ExtractDeviceWord(dt+0x1C)*k;
-    itm.conc[3] = 10. * ExtractDeviceWord(dt+0x1E)*k;
+    itm.conc[0] = ExtractDeviceWord(dt+0x18) * k * kConc;
+    itm.conc[1] = ExtractDeviceWord(dt+0x1A) * k * kConc;
+    itm.conc[2] = ExtractDeviceWord(dt+0x1C) * k * kConc;
+    itm.conc[3] = ExtractDeviceWord(dt+0x1E) * k * kConc;
     itm.P       = ( (unsigned) (dt[0x0F]) )*k;
 
     itm.index = Flash::Minute::Addy2RecordIndex(addy);

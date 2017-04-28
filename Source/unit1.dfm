@@ -5182,9 +5182,9 @@ object Form1: TForm1
     ParentFont = False
     TabOrder = 1
     object panelConnect: TPanel
-      Left = 144
+      Left = 233
       Top = 0
-      Width = 825
+      Width = 736
       Height = 43
       Align = alClient
       BevelInner = bvRaised
@@ -5201,7 +5201,7 @@ object Form1: TForm1
     object Panel3: TPanel
       Left = 0
       Top = 0
-      Width = 144
+      Width = 233
       Height = 43
       Align = alLeft
       BevelOuter = bvNone
@@ -16856,7 +16856,6 @@ object Form1: TForm1
           8001000000000000000000000000000000000000000000000000000000000000
           000000008001000080010000C0030000F00F0000}
         Visible = False
-        OnClick = btnCicleRunClick
       end
       object imgCicleRun: TImage
         Left = 12
@@ -28506,7 +28505,6 @@ object Form1: TForm1
           CB1D021200000000000000000000000000000000F00F0000E0070000C0030000
           8001000000000000000000000000000000000000000000000000000000000000
           0000000080010000C0030000E0070000F00F0000}
-        OnClick = btnCicleRunClick
       end
       object btnCicleRun: TSpeedButton
         Tag = 2
@@ -37811,7 +37809,6 @@ object Form1: TForm1
           00000000F00F0000F00F00009009000080010000000000000000000080010000
           01800000018000000000000000000000C0030000C0030000C0010000C0030000
           FC3F0000}
-        OnClick = btnCicleRunClick
       end
       object SpeedButton1: TSpeedButton
         Tag = 2
@@ -38549,6 +38546,21 @@ object Form1: TForm1
         ParentShowHint = False
         ShowHint = True
         OnClick = N1Click
+      end
+      object Button1: TButton
+        Left = 136
+        Top = 2
+        Width = 89
+        Height = 39
+        Caption = #1047#1072#1076#1072#1090#1100' '#1076#1072#1090#1091
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlue
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+        OnClick = Button1Click
       end
     end
   end

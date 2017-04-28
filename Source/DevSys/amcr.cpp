@@ -123,10 +123,9 @@ AnsiString FormatMinuteItem(const ArchItem& itm)
 
     if(!itm.isFF)
         s.cat_sprintf
-        (
-            " T=%g\"Ñ P=%g C1=%g C2=%g C3=%g C4=%g ",
-            itm.T, itm.P, itm.conc[0], itm.conc[1], itm.conc[2], itm.conc[3]
-        ) +  FormatMinuteItemEvetnts(itm) ;
+        (" T=%g\"Ñ P=%g C1=%g C2=%g C3=%g C4=%g ",
+            itm.T, itm.P, itm.conc[0], itm.conc[1], itm.conc[2], itm.conc[3]) +
+            FormatMinuteItemEvetnts(itm) ;
     return  s;
 }
 

@@ -42,25 +42,22 @@ AnsiString boolToStr(bool x) {
 void PerformInitializeDevice()
 {
     TransferManagerT& tmngr = TransferManager().Instance();
-    tmngr.ShowTopPanel( "........................................" );
-    tmngr.ShowTopPanel( "Корректировка даты и времени..." );
-    AnkatMicro::Hard::SetCurrentDateTime();
+
     if(Form1)
     {
         Form1->Panel12->Font->Color = clNavy;
     }
 
-    tmngr.ShowTopPanel( "Запрос версии ПО..." );
-
-
+    tmngr.ShowTopPanel( "Запрос версии ПО..." );      
 
     AnkatMicro::Hard::GetSensors(Form1->sensors);
 
     my::Grd::ClearTStringGrid(Form1->grd1, 1,1);
 
     MyWCout( "\n" );
-    double kefYear = ReadKef(CtrlSys().Instance().Modbus(), 1, 2);
-    MyWCout(AnsiString().sprintf("kef year - %g\n", kefYear) );
+
+    //double kefYear = ReadKef(CtrlSys().Instance().Modbus(), 1, 2);
+    //MyWCout(AnsiString().sprintf("kef year - %g\n", kefYear) );
 
     for( unsigned i=0; i<4; ++i )
     {
@@ -171,11 +168,23 @@ InitializeDevice::InitializeDevice() : SingleAction("Инициализация")
     AnkatMicro::MinuteArch::Instance();
     AnkatMicro::HourArch::Instance();
 }
-
-
+//------------------------------------------------------------------------------
 void InitializeDevice::Perform()
 {
     PerformInitializeDevice();
+}
+//------------------------------------------------------------------------------
+SyncDevDate::SyncDevDate() : SingleAction("Установка даты")
+{
+
+}
+//------------------------------------------------------------------------------
+void SyncDevDate::Perform()
+{
+    TransferManagerT& tmngr = TransferManager().Instance();
+    tmngr.ShowTopPanel( "........................................" );
+    tmngr.ShowTopPanel( "Корректировка даты и времени..." );
+    AnkatMicro::Hard::SetCurrentDateTime();
 }
 //------------------------------------------------------------------------------
 ReadArchiveTask::ReadArchiveTask(bool isHour, TDateTime dtTm1, TDateTime dtTm2) :
@@ -213,7 +222,6 @@ void ReadArchiveTask::Perform()
         if(item.dateTime >= dtTm1_ && item.dateTime <= dtTm2_)
             items0.push_back(item);
         tmngr.SetTopPanelProgress( -2 );
-
     }
 
     typedef std::pair<unsigned,unsigned> ParT;

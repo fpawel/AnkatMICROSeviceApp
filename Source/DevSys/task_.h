@@ -31,6 +31,15 @@
         virtual void Perform();
     };
 
+    class SyncDevDate : public SingleAction
+    {
+    public:
+        explicit SyncDevDate();
+        virtual ~SyncDevDate() {}
+    private:
+        virtual void Perform();
+    };
+
     class ReadArchiveTask : public SingleAction
     {
     public:

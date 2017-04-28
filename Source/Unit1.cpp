@@ -243,6 +243,7 @@ void __fastcall TForm1::FormActivate(TObject *Sender)
     grph->chrt_->BottomAxis->DateTimeFormat = "d mmm h:n:s";
     grph->Button4->OnClick = &ReadMinuteClick;
     minutesChart = grph->chrt_;
+    
 
 
     serM.T = grph->AddSeries(NULL, "Tемпература, \"С");
@@ -378,22 +379,103 @@ LRESULT TForm1::ShowHoursArchive1(  std::vector<AnkatMicro::ArchItem> items )
 
 LRESULT TForm1::ShowMinutesArchive1( std::vector<AnkatMicro::ArchItem> items )
 {
+    std::set<TDateTime> dtimes[4];
+    for( unsigned i=0; i<4; ++i )
+    {
+        for(int n=0; n<serM.conc[i]->Count(); ++n){
+            dtimes[i].insert(serM.conc[i]->XValue[n]);
+        }
+    }
+
+
     for( AnkatMicro::ArchItem* i=items.begin(); i!=items.end(); ++i )
     {
         const TDateTime dt = i->dateTime;
         const AnkatMicro::ArchItem& itm = *i;
 
         serM.T->AddXY( dt, itm.T );
-        
+
         for( unsigned i=0; i<4; ++i )
         {
-            const double conc = itm.conc[i];
-            if(conc<2000 //&& hasSensor[i]
-            )
-                serM.conc[i]->AddXY( dt, itm.conc[i] * this->sensors[i].concCoef );
+            if (dtimes[i].find(dt) == dtimes[i].end()){
+                const double conc = itm.conc[i];
+                if(conc<2000 ) {
+                    double y = conc * this->sensors[i].concCoef;
+                    serM.conc[i]->AddXY( dt, y );
+                    dtimes[i].insert(dt);
+                }
+            }
         }
     }
 }
+LRESULT TForm1::ShowMinutesArchive( const RequestArchiveHandle &hnd )
+{
+    if(hnd.idx1==-1 || hnd.idx2==-1)
+    {
+        const AnsiString msg = MYSPRINTF_("Не найден архив минутной истории %s",
+            FormatDateTimeRange( hnd.dtTm1, hnd.dtTm2 ) );
+        ::MessageBox(NULL, msg.c_str(),
+    		"Архив отсутсвует!", MB_OK | MB_APPLMODAL | MB_ICONEXCLAMATION );
+        return 0;
+    }
+    /*
+    std::ofstream fs[4];
+    for( unsigned i=0; i<4; ++i ){
+        fs[i].open( (IntToStr(i) + ".txt").c_str(), std::ios::app );
+    }
+    */
+
+    const unsigned count = std::abs(hnd.idx2-hnd.idx1);
+    TChart *chrt = static_cast<TChart*>(  serM.T->ParentChart );
+    ClearChartInXInterval(chrt, hnd.dtTm1, hnd.dtTm2);
+    AnkatMicro::ArchiveImpl &archMnt = AnkatMicro::MinuteArch::Instance();
+    const TDateTime
+        dtTm1 = archMnt.GetItem(hnd.idx1).dateTime,
+        dtTm2 = archMnt.GetItem(hnd.idx2).dateTime;
+
+    for( unsigned idx=hnd.idx1; idx<=hnd.idx2; idx = archMnt.IncIdx(idx,1) )
+    {
+        const AnkatMicro::ArchItem& itm = archMnt.GetItem(idx);
+        minutes_[itm.dateTime] = itm;
+    }
+
+    serM.T->Clear();
+    for( unsigned i=0; i<4; ++i )
+    {
+        serM.conc[i]->Clear();
+
+    }
+
+    std::set<TDateTime> dtimes[4];
+
+    for( AnkatMicro::ArchMapT::const_iterator i=minutes_.begin(); i!=minutes_.end(); ++i )
+    {
+        const TDateTime dt = i->first;
+        const AnkatMicro::ArchItem& itm = i->second;
+        if( dt<hnd.dtTm1 || dt>hnd.dtTm2 ) continue;
+        serM.T->AddXY( dt, itm.T );
+        for( unsigned i=0; i<4; ++i )
+        {
+            if (dtimes[i].find(dt) == dtimes[i].end()){
+                const double conc = itm.conc[i] * this->sensors[i].concCoef;
+                serM.conc[i]->AddXY( dt, conc );
+                dtimes[i].insert(dt);
+            }
+        }
+    }
+
+    chrt->BottomAxis->SetMinMax( hnd.dtTm1, hnd.dtTm2 );
+    NormalizeChartY(chrt);
+    //ShowEvents();
+    /*
+    for( unsigned i=0; i<4; ++i ){
+        fs[i].close();
+    }
+    */
+
+    return 0;
+}
+//------------------------------------------------------------------------------
 
 
 LRESULT TForm1::ShowHoursArchive( const RequestArchiveHandle &hnd )
@@ -406,6 +488,9 @@ LRESULT TForm1::ShowHoursArchive( const RequestArchiveHandle &hnd )
     		"Архив отсутсвует!", MB_OK | MB_APPLMODAL | MB_ICONEXCLAMATION );
         return 0;
     }
+
+    std::ofstream fileStream( "conc.txt", std::ios::app );
+    const AutoCloseFileStreamHelper<std::ofstream> acfstrm(fileStream);
 
     TChart *chrt = static_cast<TChart*>(  serH.T->ParentChart );
     AnkatMicro::ArchiveImpl &archHour = AnkatMicro::HourArch::Instance();
@@ -431,8 +516,7 @@ LRESULT TForm1::ShowHoursArchive( const RequestArchiveHandle &hnd )
         for( unsigned i=0; i<4; ++i )
         {
             const double conc = itm.conc[i];
-            if(conc<2000 //&& hasSensor[i]
-            )
+            if(conc<2000 )
                 serH.conc[i]->AddXY( dt, itm.conc[i] * this->sensors[i].concCoef );
         }
     }
@@ -442,57 +526,7 @@ LRESULT TForm1::ShowHoursArchive( const RequestArchiveHandle &hnd )
     return 0;
 }
 //------------------------------------------------------------------------------
-LRESULT TForm1::ShowMinutesArchive( const RequestArchiveHandle &hnd )
-{
-
-
-
-    if(hnd.idx1==-1 || hnd.idx2==-1)
-    {
-        const AnsiString msg = MYSPRINTF_("Не найден архив минутной истории %s",
-            FormatDateTimeRange( hnd.dtTm1, hnd.dtTm2 ) );
-        ::MessageBox(NULL, msg.c_str(),
-    		"Архив отсутсвует!", MB_OK | MB_APPLMODAL | MB_ICONEXCLAMATION );
-        return 0;
-    }
-
-    const unsigned count = std::abs(hnd.idx2-hnd.idx1);
-    TChart *chrt = static_cast<TChart*>(  serM.T->ParentChart );
-    ClearChartInXInterval(chrt, hnd.dtTm1, hnd.dtTm2);
-    AnkatMicro::ArchiveImpl &archMnt = AnkatMicro::MinuteArch::Instance();
-    const TDateTime
-        dtTm1 = archMnt.GetItem(hnd.idx1).dateTime,
-        dtTm2 = archMnt.GetItem(hnd.idx2).dateTime;
-
-    for( unsigned idx=hnd.idx1; idx<=hnd.idx2; idx = archMnt.IncIdx(idx,1) )
-    {
-        const AnkatMicro::ArchItem& itm = archMnt.GetItem(idx);
-        minutes_[itm.dateTime] = itm;
-    }
-
-    for( AnkatMicro::ArchMapT::const_iterator i=minutes_.begin(); i!=minutes_.end(); ++i )
-    {
-        const TDateTime dt = i->first;
-        const AnkatMicro::ArchItem& itm = i->second;
-        if( dt<hnd.dtTm1 || dt>hnd.dtTm2 ) continue;
-        serM.T->AddXY( dt, itm.T );
-        
-        for( unsigned i=0; i<4; ++i )
-        {
-            const double conc = itm.conc[i];
-            //if(hasSensor[i]) {
-                serM.conc[i]->AddXY( dt, itm.conc[i] * this->sensors[i].concCoef );
-            //}
-        }
-    }
-
-    chrt->BottomAxis->SetMinMax( hnd.dtTm1, hnd.dtTm2 );
-    NormalizeChartY(chrt);
-    ShowEvents();
-
-    return 0;
-}
-//------------------------------------------------------------------------------
+/*
 void TForm1::ShowEvents()
 {
     unsigned rowGrdEvt = 1;
@@ -530,7 +564,7 @@ void TForm1::ShowEvents()
     }
 }
 //------------------------------------------------------------------------------
-
+*/
 
 
 //------------------------------------------------------------------------------
@@ -601,7 +635,17 @@ void __fastcall TForm1::grdVarsKeyDown(TObject *Sender, WORD &Key,
 }
 //---------------------------------------------------------------------------
 void TForm1::ReadArchiveClick(const bool isHour)
-{   
+{
+    std::ofstream fileStream( "befor.txt", std::ios::app );
+    fileStream << "COUNT" << serM.conc[3]->Count() << "\n";
+    for (int i=0; i<serM.conc[3]->Count(); ++i) {
+        double x = serM.conc[3]->XValue[i];
+        double y = serM.conc[3]->YValue[i];
+        fileStream <<  FormatDateTime("dd.mm.yy, hh:nn", x).c_str() << "\t" << y << "\n";
+    }
+    fileStream.close();
+
+
     Word AYear1, AMonth1, ADay1, AHour1, AMinute1, ASecond, AMilliSecond,
         AYear2, AMonth2, ADay2, AHour2, AMinute2;
 
@@ -643,31 +687,6 @@ void TForm1::ReadArchiveClick(const bool isHour)
 }
 //---------------------------------------------------------------------------
 
-
-
-
-
-bool AAA(int a)
-{
-    return a==8;
-}
-void __fastcall TForm1::btnCicleRunClick(TObject *Sender)
-{
-    int aa[] = {0,1,2,3,4,5,6,7,8,9};
-    std::find_if(aa,aa+10, AAA);
-    if( tmngr_.IsThreadStopedOrTerminated() )
-    {
-        OnTransferManagerReport(TransferManagerT::State::START, "");
-        tmngr_.GetTaskList().Clear();
-        ctrlSys_.AddInitializeTask();
-        tmngr_.StartThread();
-    }
-    else
-    {
-        tmngr_.StopThread();
-    }
-}
-//---------------------------------------------------------------------------
 void __fastcall TForm1::SpeedButton1Click(TObject *Sender)
 {
     CtrlSys::Instance().SetupDialog();   
@@ -734,6 +753,40 @@ void __fastcall TForm1::menuConsoleClick(TObject *Sender)
         ::SetWindowPlacement(hCon, &conPl);
     }
  
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::btnCicleRunClick(TObject *Sender)
+{
+    
+    
+    if( tmngr_.IsThreadStopedOrTerminated() )
+    {
+        OnTransferManagerReport(TransferManagerT::State::START, "");
+        tmngr_.GetTaskList().Clear();
+        ctrlSys_.AddInitializeTask();
+        tmngr_.StartThread();
+    }
+    else
+    {
+        tmngr_.StopThread();
+    }
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::Button1Click(TObject *Sender)
+{
+    if( tmngr_.IsThreadStopedOrTerminated() )
+    {
+        OnTransferManagerReport(TransferManagerT::State::START, "");
+        tmngr_.GetTaskList().Clear();
+        ctrlSys_.AddSetDevDateTask();
+        tmngr_.StartThread();
+    }
+    else
+    {
+        tmngr_.StopThread();
+    }
 }
 //---------------------------------------------------------------------------
 
